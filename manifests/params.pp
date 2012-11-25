@@ -38,6 +38,7 @@ class postgresql::params {
   }
 
   # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
+  
   case $::osfamily {
     'RedHat', 'Linux': {
       $service_name             = 'postgresql'
@@ -48,9 +49,18 @@ class postgresql::params {
       $initdb_path              = '/usr/bin/initdb'
       $createdb_path            = '/usr/bin/createdb'
       $psql_path                = '/usr/bin/psql'
-      $datadir                  = '/var/lib/pgsql/data/'
-      $pg_hba_conf_path         = '/var/lib/pgsql/data/pg_hba.conf'
-      $postgresql_conf_path     = '/var/lib/pgsql/data/postgresql.conf'
+      $datadir = $::osfamily ? {
+        /(?i:redhat)/ => '/var/lib/pgsql/data/',
+        /(?i:linux)/  => '/var/lib/pgsql9/data/',
+      }
+      $pg_hba_conf_path = $::osfamily ? {
+        /(?i:redhat)/ => '/var/lib/pgsql/data/pg_hba.conf',
+        /(?i:linux)/  => '/var/lib/pgsql9/data/pg_hba.conf',
+      }
+      $postgresql_conf_path = $::osfamily ? {
+        /(?i:redhat)/ => '/var/lib/pgsql/data/postgresql.conf',
+        /(?i:linux)/  => '/var/lib/pgsql9/data/postgresql.conf',
+      }
       $firewall_supported       = true
       $persist_firewall_command = '/sbin/iptables-save > /etc/sysconfig/iptables'
     }
