@@ -21,10 +21,12 @@ Facter.add("postgres_default_version") do
     case Facter.value('osfamily')
       when 'RedHat'
         get_redhat_postgres_version()
+      when 'Linux'
+        get_redhat_postgres_version()
       when 'Debian'
         get_debian_postgres_version()
       else
-        nil
+        get_redhat_postgres_version()
     end
   end
 end
