@@ -37,8 +37,9 @@ class postgresql::params {
     }
   }
 
+  # Amazon Linux's OS Family is 'Linux', operating system 'Amazon'.
   case $::osfamily {
-    'RedHat': {
+    'RedHat', 'Linux': {
       $service_name             = 'postgresql'
       $client_package_name      = 'postgresql'
       $server_package_name      = 'postgresql-server'
@@ -88,7 +89,7 @@ class postgresql::params {
 
 
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports osfamily RedHat, Linux and Debian")
     }
   }
 
